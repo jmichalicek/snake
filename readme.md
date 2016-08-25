@@ -3,6 +3,6 @@ Very old code for one of my first programs, a Snake! game written in C and a lev
 
 TODO:
 
-* Clean up formatting
-* Review code for things which especially suck and consider making it better?
+* Clean up things which are crappy - add some more defines, move some stuff in switch statements
+  into functions
 * Make a makefile
