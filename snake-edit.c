@@ -45,7 +45,7 @@ int main() {
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
 
-    char move = '\0';
+    int move;
     WINDOW *myWindow = initscr();
     cbreak();
     noecho();
@@ -53,6 +53,7 @@ int main() {
 
     redraw(board, x, y);
 
+    move = getch();
     while (move != 'q') {
         move = getch();
         modifyArray(board, move, &x, &y);
@@ -63,7 +64,7 @@ int main() {
 }
 
 
-void redraw(int board[24][50], const int x, const int y) {
+void redraw(int board[XSIZE][YSIZE], const int x, const int y) {
     int i;
     int i2;
     clear();
