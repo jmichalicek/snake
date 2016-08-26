@@ -10,6 +10,18 @@
 #define YSIZE 50
 #define MAX_SNAKE_LENGTH 100
 
+/* Characters used to represent snake, mouse, walls, etc. on screen */
+#define MOUSE_STRING "M"
+#define SNAKE_BODY_STRING "&"
+#define WALL_STRING "*"
+#define OPEN_STRING " "
+
+/* ints used to identify mouse, snake, etc. on the board int array */
+#define MOUSE_BOARD_IDENTIFIER 3
+#define SNAKE_BOARD_IDENTIFIER 2
+#define WALL_BOARD_IDENTIFIER 1
+#define OPEN_BOARD_IDENTIFIER 0
+
 struct player {
     int score;
     int length;
@@ -35,8 +47,8 @@ int main() {
     int speed = 2;
     int mouse = 0;
     player snake = {0, 5};
-    int coords[2][100] = {{12}, {25}};
-    int alive = 0;
+    int coords[2][MAX_SNAKE_LENGTH] = {{12}, {25}};
+    int alive = 0;  // I seem to have done this backwards... alive is false to be alive.
     int level = 0;
     int levelMade;
 
@@ -70,7 +82,7 @@ int main() {
             go = go2;
         }
 
-        if (snake.length == 100) {
+        if (snake.length == MAX_SNAKE_LENGTH) {
             levelMade = makeLevel(game, coords, &snake.length, &level);
             if (levelMade != 0) {
                 endwin();
@@ -115,58 +127,60 @@ int moveSnake(int board[XSIZE][YSIZE], int coords[2][MAX_SNAKE_LENGTH], int go, 
     /*figure out which way snake moves, update the array to match*/
     switch (go) {
         case KEY_UP:
+            // why the nested if... what was I doing?
             if (board[coords[0][0] - 1][coords[1][0]] != 1) {
-                if (board[coords[0][0] - 1][coords[1][0]] == 3) {
+                if (board[coords[0][0] - 1][coords[1][0]] == MOUSE_BOARD_IDENTIFIER) {
                     *score = *score + 1;
                     *length = *length + 5;
                     *mouse = 0;
                 }
                 hold = (coords[0][0] - 1);
             }
-            if (board[coords[0][0] - 1][coords[1][0]] == 1 ||
-                board[coords[0][0] - 1][coords[1][0]] == 2) {
+            if (board[coords[0][0] - 1][coords[1][0]] == WALL_BOARD_IDENTIFIER ||
+                board[coords[0][0] - 1][coords[1][0]] == SNAKE_BOARD_IDENTIFIER) {
                     alive = 1;
             }
             break;
         case KEY_DOWN:
             if (board[coords[0][0] + 1][coords[1][0]] != 1) {
-                if (board[coords[0][0] + 1][coords[1][0]] == 3) {
+                /* why is this bit not in a function?  do that. */
+                if (board[coords[0][0] + 1][coords[1][0]] == MOUSE_BOARD_IDENTIFIER) {
                     *score = *score + 1;
                     *length = *length + 5;
                     *mouse = 0;
                 }
                 hold = coords[0][0] + 1;
             }
-            if (board[coords[0][0] + 1][coords[1][0]] == 1 ||
-                board[coords[0][0] + 1][coords[1][0]] == 2) {
+            if (board[coords[0][0] + 1][coords[1][0]] == WALL_BOARD_IDENTIFIER ||
+                board[coords[0][0] + 1][coords[1][0]] == SNAKE_BOARD_IDENTIFIER) {
                     alive = 1;
             }
             break;
         case KEY_LEFT:
             if (board[coords[0][0]][coords[1][0] - 1] != 1) {
-                if (board[coords[0][0]][coords[1][0] - 1] == 3) {
+                if (board[coords[0][0]][coords[1][0] - 1] == MOUSE_BOARD_IDENTIFIER) {
                     *score = *score + 1;
                     *length = *length + 5;
                     *mouse = 0;
                 }
                 hold = coords[1][0] - 1;
             }
-            if (board[coords[0][0]][coords[1][0] - 1] == 1 ||
-                board[coords[0][0]][coords[1][0] - 1] == 2) {
+            if (board[coords[0][0]][coords[1][0] - 1] == WALL_BOARD_IDENTIFIER ||
+                board[coords[0][0]][coords[1][0] - 1] == SNAKE_BOARD_IDENTIFIER) {
                     alive = 1;
             }
             break;
         case KEY_RIGHT:
             if (board[coords[0][0]][coords[1][0] + 1] != 1) {
-                if (board[coords[0][0]][coords[1][0] + 1] == 3) {
+                if (board[coords[0][0]][coords[1][0] + 1] == MOUSE_BOARD_IDENTIFIER) {
                     *score = *score + 1;
                     *length = *length + 5;
                     *mouse = 0;
                 }
                 hold = coords[1][0] + 1;
             }
-            if (board[coords[0][0]][coords[1][0] + 1] == 1 ||
-                board[coords[0][0]][coords[1][0] + 1] == 2) {
+            if (board[coords[0][0]][coords[1][0] + 1] == WALL_BOARD_IDENTIFIER ||
+                board[coords[0][0]][coords[1][0] + 1] == SNAKE_BOARD_IDENTIFIER) {
                     alive = 1;
             }
             break;
@@ -190,7 +204,7 @@ int moveSnake(int board[XSIZE][YSIZE], int coords[2][MAX_SNAKE_LENGTH], int go, 
         board[oldX][oldY] = 0;
 
         for (i = 0; i < *length; i++) {
-            board[coords[0][i]][coords[1][i]] = 2;
+            board[coords[0][i]][coords[1][i]] = SNAKE_BOARD_IDENTIFIER;
         }
     }
     return alive;
@@ -237,10 +251,10 @@ void redraw(int board[XSIZE][YSIZE], const int length, const int score) {
                     printw("*");
                     break;
                 case 2:
-                    printw("&");
+                    printw(""SNAKE_BODY_STRING);
                     break;
                 case 3:
-                    printw("M");
+                    printw(""MOUSE_STRING);
                     break;
             }
         }
@@ -311,7 +325,7 @@ void titleScreen() {
 }
 
 
-int makeLevel(int board[XSIZE][YSIZE], int coords[2][100], int *length, int *level) {
+int makeLevel(int board[XSIZE][YSIZE], int coords[2][MAX_SNAKE_LENGTH], int *length, int *level) {
     FILE *levelFile;
     int i;
     int i2;
