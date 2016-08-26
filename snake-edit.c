@@ -17,8 +17,6 @@ void modifyArray(int [XSIZE][YSIZE], int, int *, int *);
 void saveMap(int [XSIZE][YSIZE]);
 
 int main() {
-    int i;
-    int i2;
     int x = 12;
     int y = 25;
     int board[XSIZE][YSIZE] = {
@@ -47,7 +45,7 @@ int main() {
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
 
-    int move;
+    char move = '\0';
     WINDOW *myWindow = initscr();
     cbreak();
     noecho();

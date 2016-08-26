@@ -48,11 +48,11 @@ int main() {
     int mouse = 0;
     player snake = {0, 5};
     int coords[2][MAX_SNAKE_LENGTH] = {{12}, {25}};
-    int alive = 0;  // I seem to have done this backwards... alive is false to be alive.
+    int alive = 0;  /* I seem to have done this backwards... alive is false to be alive. */
     int level = 0;
     int levelMade;
 
-    FILE *savePos;
+    /* FILE *savePos; */
 
     WINDOW *myWindow = initscr();
     noecho();
@@ -127,7 +127,7 @@ int moveSnake(int board[XSIZE][YSIZE], int coords[2][MAX_SNAKE_LENGTH], int go, 
     /*figure out which way snake moves, update the array to match*/
     switch (go) {
         case KEY_UP:
-            // why the nested if... what was I doing?
+            /* why the nested if... what was I doing? */
             if (board[coords[0][0] - 1][coords[1][0]] != 1) {
                 if (board[coords[0][0] - 1][coords[1][0]] == MOUSE_BOARD_IDENTIFIER) {
                     *score = *score + 1;
