@@ -8,6 +8,7 @@
 
 #define XSIZE 24
 #define YSIZE 50
+#define MAX_SNAKE_LENGTH 100
 
 struct player {
     int score;
@@ -16,17 +17,17 @@ struct player {
 
 typedef struct player player;
 
-void redraw(int [] [], const int, const int);
-void makeMouse(int [] [], int *);
-int moveSnake(int [] [], int [] [], int, int *, int *, int *);
+void redraw(int [XSIZE][YSIZE], const int, const int);
+void makeMouse(int [XSIZE][YSIZE], int *);
+int moveSnake(int [XSIZE][YSIZE], int [2][MAX_SNAKE_LENGTH], int, int *, int *, int *);
 int getScores(const int);
 void saveScores(const int, const int);
 void gameOver();
 void titleScreen();
-int makeLevel(int [] [], int [] [], int *, int *);
+int makeLevel(int [XSIZE][YSIZE], int [2][MAX_SNAKE_LENGTH], int *, int *);
 
 
-main() {
+int main() {
     int game[XSIZE][YSIZE] =
         {{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0}};
     int go = 3;
@@ -104,7 +105,7 @@ main() {
 }
 
 
-int moveSnake(int board[XSIZE][YSIZE], int coords[2][100], int go, int *length, int *score, int *mouse) {
+int moveSnake(int board[XSIZE][YSIZE], int coords[2][MAX_SNAKE_LENGTH], int go, int *length, int *score, int *mouse) {
     int oldX = coords[0][*length - 1];
     int oldY = coords[1][*length - 1];
     int i;
