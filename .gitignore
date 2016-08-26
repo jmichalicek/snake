@@ -3,3 +3,5 @@ a.out
 *.dSYM
 snake
 snake-editor
+.snakeSave
+levels.dat
