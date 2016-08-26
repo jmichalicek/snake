@@ -2,16 +2,26 @@
 #include <stdlib.h>
 #include <curses.h>
 
-void redraw(int [] [], const int, const int);
-void modifyArray(int [] [], int, int *, int *);
-void saveMap(int [] []);
+#define XSIZE 24
+#define YSIZE 50
 
-main() {
+#define CURSOR_STRING "+"
+#define WALL_STRING "*"
+#define OPEN_STRING " "
+
+#define WALL_BOARD_IDENTIFIER 1
+#define OPEN_BOARD_IDENTIFIER 0
+
+void redraw(int [XSIZE][YSIZE], const int, const int);
+void modifyArray(int [XSIZE][YSIZE], int, int *, int *);
+void saveMap(int [XSIZE][YSIZE]);
+
+int main() {
     int i;
     int i2;
     int x = 12;
     int y = 25;
-    int board[24][50] = {
+    int board[XSIZE][YSIZE] = {
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -62,18 +72,18 @@ void redraw(int board[24][50], const int x, const int y) {
 
     for (i = 0; i < 24; i++) {
         for (i2 = 0; i2 < 50; i2++) {
-            if (board[i][i2] == 1) {
+            if (board[i][i2] == WALL_BOARD_IDENTIFIER) {
                 if (i != (x - 1) || i2 != (y - 1)) {
-                    printw("*");
+                    printw(WALL_STRING);
                 }
             }
-            if (board[i][i2] == 0) {
+            if (board[i][i2] == OPEN_BOARD_IDENTIFIER) {
                 if (i != (x - 1) || i2 != (y - 1)) {
-                    printw(" ");
+                    printw(OPEN_STRING);
                 }
             }
             if ((i == (x - 1)) && (i2 == (y - 1))) {
-                printw("+");
+                printw(CURSOR_STRING);
             }
 
         }
@@ -83,7 +93,7 @@ void redraw(int board[24][50], const int x, const int y) {
 }
 
 
-void modifyArray(int board[24][50], int move, int *x, int *y) {
+void modifyArray(int board[XSIZE][YSIZE], int move, int *x, int *y) {
     switch (move) {
         case KEY_UP:
             *x = *x - 1;
@@ -98,10 +108,10 @@ void modifyArray(int board[24][50], int move, int *x, int *y) {
             *y = *y + 1;
             break;
         case 'a':
-            if (board[*x - 1][*y - 1] == 1) {
+            if (board[*x - 1][*y - 1] == WALL_BOARD_IDENTIFIER) {
                 board[*x - 1][*y - 1] = 0;
             } else {
-                board[*x - 1][*y - 1]  = 1;
+                board[*x - 1][*y - 1]  = WALL_BOARD_IDENTIFIER;
             }
             break;
         case 's':
@@ -113,7 +123,7 @@ void modifyArray(int board[24][50], int move, int *x, int *y) {
   return;
 }
 
-void saveMap(int board[24][50]) {
+void saveMap(int board[XSIZE][YSIZE]) {
     FILE *saveFile;
     int i;
     int i2;
