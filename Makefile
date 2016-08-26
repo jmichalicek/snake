@@ -1,22 +1,21 @@
 CC = gcc
-CFLAGS = -Wall -pedantic -ansi -lncurses
+CFLAGS = -Wall -pedantic -ansi -lcurses
 
-all: game
+all: snake snake-editor
 
-snake: snake.c
-	${CC} ${CFLAGS} -g -o snake snake.c
+snake: snake.o
+	${CC} ${CFLAGS} -g -o snake snake.o
 
-snake-editor: snake-edit.c
-	${CC} ${CFLAGS} -g -o snake-editor snake-edit.c
-	
-# game: utils.o
-# 	${cc} ${CFLAGS} -g -o game game.c utils.o
-#
-# utils.o: utils.h
-# 	${cc} ${CFLAGS} -g -c -o utils.o utils.c
-#
-# player.o: player.h
-# 	${cc} ${CFLAGS} -g -c -o utils.o utils.c
+snake.o: snake.c
+	${CC} ${CFLAGS} -c snake.c
 
-.PHONY clean:
-	-rm game *.o
+snake-editor: snake-edit.o
+	${CC} ${CFLAGS} -g -o snake-editor snake-edit.o
+
+snake-edit.o: snake-edit.c
+	${CC} ${CFLAGS} -c snake-edit.c
+
+.PHONY: clean
+
+clean:
+	-rm snake snake-editor *.o
